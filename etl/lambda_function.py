@@ -7,7 +7,7 @@ def handler(event, context):
     client = boto3.client('emr', region_name='us-east-2')
 
     cluster_id = client.run_job_flow(
-                Name='EMR-Ney-IGTI-delta',
+                Name='EMR-Denis-IGTI-delta',
                 ServiceRole='EMR_DefaultRole',
                 JobFlowRole='EMR_EC2_DefaultRole',
                 VisibleToAllUsers=True,
@@ -21,19 +21,12 @@ def handler(event, context):
                             'InstanceRole': 'MASTER',
                             'InstanceType': 'm5.xlarge',
                             'InstanceCount': 1,
-                        },
-                        {
-                            'Name': 'Worker nodes',
-                            'Market': 'SPOT',
-                            'InstanceRole': 'CORE',
-                            'InstanceType': 'm5.xlarge',
-                            'InstanceCount': 1,
                         }
                     ],
                     'Ec2KeyName': 'denis-igti-teste',
                     'KeepJobFlowAliveWhenNoSteps': True,
                     'TerminationProtected': False,
-                    'Ec2SubnetId': 'subnet-1df20360'
+                    'Ec2SubnetId': 'subnet-0a4cd408aaebd46d6'
                 },
 
                 Applications=[
@@ -108,7 +101,7 @@ def handler(event, context):
                                  '--conf', 'spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog', 
                                  '--master', 'yarn',
                                  '--deploy-mode', 'cluster',
-                                 's3://datalake-ney-igti-edc-tf/emr-code/pyspark/02_delta_spark_upsert.py'
+                                 's3://datalake-denis-igti-edc-tf/emr-code/pyspark/02_delta_spark_upsert.py'
                                  ]
                     }
                 }],

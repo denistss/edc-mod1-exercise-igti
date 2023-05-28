@@ -40,7 +40,9 @@ resource "aws_iam_policy" "lambda" {
             "Action": [
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
-                "logs:PutLogEvents"
+                "logs:PutLogEvents",
+                "iam:GetRole",
+                "iam:PassRole"
             ],
             "Resource": "*"
         },
@@ -63,6 +65,25 @@ resource "aws_iam_policy" "lambda" {
           "Resource": ["arn:aws:iam::127012818163:role/EMR_DefaultRole",
                        "arn:aws:iam::127012818163:role/EMR_EC2_DefaultRole"],
           "Effect": "Allow"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+              "iam:CreateServiceLinkedRole",
+              "iam:PutRolePolicy",
+              "iam:UpdateRoleDescription",
+              "iam:DeleteServiceLinkedRole",
+              "iam:GetServiceLinkedRoleDeletionStatus"
+          ],
+          "Resource": "arn:aws:iam::*:role/aws-service-role/elasticmapreduce.amazonaws.com*/AWSServiceRoleForEMRCleanup*",
+          "Condition": {
+              "StringLike": {
+                  "iam:AWSServiceName": [
+                      "elasticmapreduce.amazonaws.com",
+                      "elasticmapreduce.amazonaws.com.cn"
+                  ]
+              }
+          }
         }
     ]
 }
